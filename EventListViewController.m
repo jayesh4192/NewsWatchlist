@@ -7,10 +7,11 @@
 //
 
 #import "EventListViewController.h"
+#import "EventData.h"
 
 @interface EventListViewController ()
 {
-    NSMutableArray *eventStrings;
+
 }
 @end
 
@@ -37,8 +38,7 @@
     self.eventTableView.delegate = self;
     self.eventTableView.dataSource = self;
     
-    eventStrings = [[NSMutableArray alloc] initWithObjects:nil];
-
+    [EventData sharedInstance];
     
 }
 
@@ -54,14 +54,15 @@
 {
 #warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return [eventStrings count];
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 1;
+    [EventData sharedInstance];
+    return [EventData getCount];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -71,7 +72,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    
+        cell.textLabel.text = [EventData getEventData:indexPath.row];
     // Configure the cell...
     
     return cell;

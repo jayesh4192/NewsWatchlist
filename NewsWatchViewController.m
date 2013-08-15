@@ -9,6 +9,8 @@
 #import "NewsWatchViewController.h"
 #import "NewsWatchCell.h"
 #import "NewsWatchAppDelegate.h"
+#import "EventData.h"
+#import "EventListViewController.h"
 
 @interface NewsWatchViewController ()
 
@@ -45,6 +47,8 @@
     
     totalStrings = [[NSMutableArray alloc] initWithObjects:@"One", @"Two", @"Three", @"Four", @"Five", @"Six", nil];
     
+     /*EventListViewController *viewController = [[EventListViewController alloc] initWithNibName:@"EventListViewControler" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];*/
 }
 
 -(void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
@@ -112,10 +116,10 @@
     else {
         cell.searchLabel.text = [filteredStrings objectAtIndex:indexPath.row];
     }
+    [cell.searchLabel setTag:indexPath.row];
     [cell.addEvent setTag:indexPath.row];
     [cell.addEvent addTarget:self action:@selector(addEventToEventList:) forControlEvents:UIControlEventTouchUpInside];
 
-    
     return cell;
     
 }
@@ -125,10 +129,13 @@
 -(IBAction)addEventToEventList:(id)sender
 {
     int row = [sender tag];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    //id cell = [UITableView cellForRowAtIndexPath:indexPath];
-    //[cell.textField setText:....];
+    NewsWatchCell *clicked = (NewsWatchCell *)[[sender superview] superview];
+    [EventData sharedInstance];
+    [EventData addEventData:clicked.searchLabel.text];
+
+    [self.myTableView setHidden:YES];
     
-    NSLog(@"Hello");
+    NSLog(@"Hello %d", [EventData getCount]);
+    
 }
 @end
